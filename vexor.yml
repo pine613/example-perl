@@ -1,0 +1,17 @@
+language: go
+
+before_install:
+  - perl -v
+  - curl -L https://cpanmin.us | perl - --sudo App::cpanminus
+
+install:
+  - sudo cpanm --quiet --installdeps --notest .
+  - sudo cpanm --quiet --notest --skip-satisfied Devel::Cover Devel::Cover::Report::Codecov
+
+script:
+  - perl Build.PL && ./Build build
+  - cover -test
+
+after_script:
+  - cover -report codecov
+
